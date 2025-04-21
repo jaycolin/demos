@@ -130,3 +130,120 @@ foreach my $filename (@rows){
 }  
 
 __END__
+=head1 NAME
+
+convertSnpCacheToVCF.pl - Convert SNP cache data into VCF (Variant Call Format) file
+
+=head1 SYNOPSIS
+
+  convertSnpCacheToVCF.pl <input_file> <reference_strain>
+  
+  Example:
+  convertSnpCacheToVCF.pl snp_data.txt reference_strain_name > output.vcf
+
+=head1 DESCRIPTION
+
+This script reads SNP (Single Nucleotide Polymorphism) data from a cache file and converts it into a VCF (Variant Call Format) file. The VCF file is a widely used format for storing gene sequence variations.
+
+=head1 REQUIREMENTS
+
+The script requires the following dependencies, which can be found in the VEuPathDB GitHub repository:
+
+=over 4
+
+=item * L<ApiCommonData::Load::VariationFileReader> - Reads variation files.
+
+=item * L<ApiCommonData::Load::FileReader> - Base file reader library.
+
+=item * L<ApiCommonData::Load::SnpUtils> - Utilities for SNP data processing.
+
+=back
+
+=head1 ARGUMENTS
+
+=over 4
+
+=item B<input_file>
+
+The input SNP data file.
+
+=item B<reference_strain>
+
+The name of the reference strain, which must be specified.
+
+=back
+
+=head1 OUTPUT
+
+The script outputs a VCF file to STDOUT. The VCF file contains the following columns:
+
+=over 4
+
+=item * CHROM - The chromosome or scaffold name.
+
+=item * POS - The position of the SNP.
+
+=item * ID - The SNP identifier.
+
+=item * REF - The reference allele.
+
+=item * ALT - The alternative allele(s).
+
+=item * QUAL - Placeholder for quality score (set to ".").
+
+=item * FILTER - Placeholder for filter status (set to ".").
+
+=item * INFO - Placeholder for additional information (set to ".").
+
+=item * FORMAT - The genotype format (set to "GT").
+
+=item * Additional columns for strains, with genotype data.
+
+=back
+
+=head1 DETAILS
+
+The script processes the input SNP data in the following steps:
+
+=over 4
+
+=item 1. Reads SNP data using L<ApiCommonData::Load::VariationFileReader>.
+
+=item 2. Identifies the reference allele for each SNP. If the reference allele cannot be determined, the script terminates with an error.
+
+=item 3. Generates genotype data for each strain, normalizing allele mappings (0=reference, 1=first alternative, etc.).
+
+=item 4. Outputs the SNP data in VCF format with the required columns and headers.
+
+=back
+
+=head1 TEMPORARY FILES
+
+The script uses temporary files to store intermediate SNP data and removes them upon completion.
+
+=head1 LIMITATIONS
+
+=over 4
+
+=item * The script attempts to guess the reference allele. Ideally, the reference allele should be obtained from a reference genome FASTA or database.
+
+=item * The script assumes unique strain entries per SNP. Duplicate strains in the input data will result in an error.
+
+=item * The order of strains in the output VCF is determined by the order of their appearance in the input data.
+
+=back
+
+=head1 EXAMPLES
+
+  # Convert SNP data to VCF format
+  perl convertSnpCacheToVCF.pl my_snp_data.txt my_reference_strain > output.vcf
+
+=head1 AUTHOR
+
+This script is part of the VEuPathDB project.
+
+=head1 LICENSE
+
+This script is distributed under the terms of the VEuPathDB license.
+
+=cut
