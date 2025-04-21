@@ -1,0 +1,178 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>convertSnpCacheToVCF.pl - Convert SNP cache data into VCF (Variant Call Format) file</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#REQUIREMENTS">REQUIREMENTS</a></li>
+  <li><a href="#ARGUMENTS">ARGUMENTS</a></li>
+  <li><a href="#OUTPUT">OUTPUT</a></li>
+  <li><a href="#DETAILS">DETAILS</a></li>
+  <li><a href="#TEMPORARY-FILES">TEMPORARY FILES</a></li>
+  <li><a href="#LIMITATIONS">LIMITATIONS</a></li>
+  <li><a href="#EXAMPLES">EXAMPLES</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+  <li><a href="#LICENSE">LICENSE</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>convertSnpCacheToVCF.pl - Convert SNP cache data into VCF (Variant Call Format) file</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code> convertSnpCacheToVCF.pl &lt;input_file&gt; &lt;reference_strain&gt;
+ 
+ Example:
+ convertSnpCacheToVCF.pl snp_data.txt reference_strain_name &gt; output.vcf</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This script reads SNP (Single Nucleotide Polymorphism) data from a cache file and converts it into a VCF (Variant Call Format) file. The VCF file is a widely used format for storing gene sequence variations.</p>
+
+<h1 id="REQUIREMENTS">REQUIREMENTS</h1>
+
+<p>The script requires the following dependencies, which can be found in the VEuPathDB GitHub repository:</p>
+
+<ul>
+
+<li><p><a>ApiCommonData::Load::VariationFileReader</a> - Reads variation files.</p>
+
+</li>
+<li><p><a>ApiCommonData::Load::FileReader</a> - Base file reader library.</p>
+
+</li>
+<li><p><a>ApiCommonData::Load::SnpUtils</a> - Utilities for SNP data processing.</p>
+
+</li>
+</ul>
+
+<h1 id="ARGUMENTS">ARGUMENTS</h1>
+
+<dl>
+
+<dt id="input_file"><b>input_file</b></dt>
+<dd>
+
+<p>The input SNP data file.</p>
+
+</dd>
+<dt id="reference_strain"><b>reference_strain</b></dt>
+<dd>
+
+<p>The name of the reference strain, which must be specified.</p>
+
+</dd>
+</dl>
+
+<h1 id="OUTPUT">OUTPUT</h1>
+
+<p>The script outputs a VCF file to STDOUT. The VCF file contains the following columns:</p>
+
+<ul>
+
+<li><p>CHROM - The chromosome or scaffold name.</p>
+
+</li>
+<li><p>POS - The position of the SNP.</p>
+
+</li>
+<li><p>ID - The SNP identifier.</p>
+
+</li>
+<li><p>REF - The reference allele.</p>
+
+</li>
+<li><p>ALT - The alternative allele(s).</p>
+
+</li>
+<li><p>QUAL - Placeholder for quality score (set to &quot;.&quot;).</p>
+
+</li>
+<li><p>FILTER - Placeholder for filter status (set to &quot;.&quot;).</p>
+
+</li>
+<li><p>INFO - Placeholder for additional information (set to &quot;.&quot;).</p>
+
+</li>
+<li><p>FORMAT - The genotype format (set to &quot;GT&quot;).</p>
+
+</li>
+<li><p>Additional columns for strains, with genotype data.</p>
+
+</li>
+</ul>
+
+<h1 id="DETAILS">DETAILS</h1>
+
+<p>The script processes the input SNP data in the following steps:</p>
+
+<dl>
+
+<dt id="Reads-SNP-data-using-ApiCommonData::Load::VariationFileReader">1. Reads SNP data using <a>ApiCommonData::Load::VariationFileReader</a>.</dt>
+<dd>
+
+</dd>
+<dt id="Identifies-the-reference-allele-for-each-SNP.-If-the-reference-allele-cannot-be-determined-the-script-terminates-with-an-error">2. Identifies the reference allele for each SNP. If the reference allele cannot be determined, the script terminates with an error.</dt>
+<dd>
+
+</dd>
+<dt id="Generates-genotype-data-for-each-strain-normalizing-allele-mappings-0-reference-1-first-alternative-etc">3. Generates genotype data for each strain, normalizing allele mappings (0=reference, 1=first alternative, etc.).</dt>
+<dd>
+
+</dd>
+<dt id="Outputs-the-SNP-data-in-VCF-format-with-the-required-columns-and-headers">4. Outputs the SNP data in VCF format with the required columns and headers.</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="TEMPORARY-FILES">TEMPORARY FILES</h1>
+
+<p>The script uses temporary files to store intermediate SNP data and removes them upon completion.</p>
+
+<h1 id="LIMITATIONS">LIMITATIONS</h1>
+
+<ul>
+
+<li><p>The script attempts to guess the reference allele. Ideally, the reference allele should be obtained from a reference genome FASTA or database.</p>
+
+</li>
+<li><p>The script assumes unique strain entries per SNP. Duplicate strains in the input data will result in an error.</p>
+
+</li>
+<li><p>The order of strains in the output VCF is determined by the order of their appearance in the input data.</p>
+
+</li>
+</ul>
+
+<h1 id="EXAMPLES">EXAMPLES</h1>
+
+<pre><code># Convert SNP data to VCF format
+perl convertSnpCacheToVCF.pl my_snp_data.txt my_reference_strain &gt; output.vcf</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>This script is part of the VEuPathDB project.</p>
+
+<h1 id="LICENSE">LICENSE</h1>
+
+<p>This script is distributed under the terms of the VEuPathDB license.</p>
+
+
+</body>
+
+</html>
+
+
